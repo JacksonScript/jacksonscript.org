@@ -47,7 +47,7 @@ app.get(staticPath('client/login.js'), browserify('./client/login.js'));
 app.get('/style.css', less('./less/style.less'));
 
 app.get('/', function (req, res) {
-  res.render('home', {});
+  res.render('home', {pages:pages});
 });
 
 app.get('/robots.txt', function (req, res) {
@@ -113,7 +113,11 @@ app.get('/pipermail/es-discuss/:month/:id.html', function (req, res, next) {
     .done(null, next);
 })
 
-app.use(require('./lib/notes.js'));
+var meetings = require('./lib/meetings.js');
+var pages = meetings.pages;
+
+app.use(meetings.app);
+
 
 var request = require('request');
 var passport = require('passport');

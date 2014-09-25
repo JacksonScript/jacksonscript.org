@@ -1,0 +1,59 @@
+extends layout
+
+block title
+  title JacksonScript.org - Meetings
+
+block navsections
+  li
+    a(href='/1') Discussion
+  li.active
+    a(href='/meetings') Meetings
+  li
+    a(href='/about') About
+
+block content
+  .row
+    .col-md-12
+      h2 JacksonScript Meetings
+  .row
+    .col-md-12
+      p
+        | These notes are the collective work of the members of&nbsp;
+        a(href='https://jacksonscript.org/') JacksonScript
+        | . To contribute, please submit a pull request to&nbsp;
+        a(href='https://github.com/JacksonScript/meetings') this
+        |  GitHub repository. It's hoped that these notes will provide a readable, useful archive of past JacksonScript events.
+  .row
+    .col-md-12
+      h3 General Information
+  ul.topics
+    for page in pages
+      li.topic-title
+        a(href='/pages/' + page.title)
+          h4
+            i.icon-file-text
+            | &nbsp;
+            = page.title
+  - var m = meetups.sort(function (a, b) { return a.meetupDay < b.meetupDay ? 1 : -1 })
+  for meetup in m
+    .row
+      .col-md-12
+        h3= meetup.meetupDay
+    .row
+      .col-md-12
+        ul.topics
+          - var assets = meetup.assets.sort()
+          for asset in assets
+            li.topic-title
+              if asset.html
+                a(href='/meetings/' + meetup.meetupDay + '/' + asset.title)
+                  h4
+                    i.icon-file-text
+                    | &nbsp;
+                    = asset.title
+              else
+                a(href='//static.jacksonscript.org/' + meetup.meetupDay + '/' + asset.title + '/')
+                  h4
+                    i.icon-desktop
+                    | &nbsp;
+                    = asset.title
