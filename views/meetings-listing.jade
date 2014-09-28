@@ -43,26 +43,29 @@ block content
       .col-md-12
         h3
           = meetup.meetupDay
-          small
-            &nbsp;&mdash;&nbsp;
-            a(rel="popover", data-toggle="popover", data-placement="top", title="Add to Calendar", data-content=meetup.location.popoverContent)
-              i.icon-calendar
-              | &nbsp;
-              = moment(meetup.location.timeStart).format('h:mm a')
-              | &nbsp;-&nbsp;
-              = moment(meetup.location.timeEnd).format('h:mm a ')
-            &nbsp;&mdash;&nbsp;
-            a(target="_blank", href="//maps.google.com?q="+meetup.location.address.replace(' ', '+'))
-              i.icon-map-marker
-              | &nbsp;
-              = meetup.location.name + " "
-            if meetup.location.url
-              a(href=meetup.location.url, target="_blank").location-url
-                small
-                  = "("
-                  i.icon-external-link
-                  | &nbsp;
-                  = "website)"
+          if meetup.location
+            small
+              | &nbsp;&mdash;&nbsp;
+              a(rel="popover", data-toggle="popover", data-placement="top", title="Add to Calendar", data-content=meetup.location.popoverContent)
+                i.icon-calendar
+                | &nbsp;
+                = moment(meetup.location.timeStart).format('h:mm a')
+                | &nbsp;-&nbsp;
+                = moment(meetup.location.timeEnd).format('h:mm a ')
+              | &nbsp;&mdash;&nbsp;
+              a(target="_blank", href="//maps.google.com?q="+meetup.location.address.replace(' ', '+'))
+                i.icon-map-marker
+                | &nbsp;
+                = meetup.location.name + " "
+              if meetup.location.url
+                a(href=meetup.location.url, target="_blank").location-url
+                  small
+                    = "("
+                    i.icon-external-link
+                    | &nbsp;
+                    = "website)"
+          else
+             small &nbsp;Date and Location to be Decided
     .row
       .col-md-12
         ul.topics
@@ -82,6 +85,6 @@ block content
                     | &nbsp;
                     = asset.title
           if moment(meetup.meetupDay).isAfter(moment())
-            a(target='_blank', href='https://github.com/JacksonScript/meetings/new/master/'+meetup.meetupDay).btn.btn-lg.btn-success.btn-block
+            a(target='_blank', href='https://github.com/JacksonScript/meetings/new/'+(process.env.GITHUB_BRANCH||'master')+'/'+meetup.meetupDay).btn.btn-lg.btn-success.btn-block
               i.icon-bolt
               | &nbsp; Submit Your Talk
