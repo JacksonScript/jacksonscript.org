@@ -40,6 +40,7 @@ var staticPath = function (dir) {
 app.use('/static/' + version, express.static(join(__dirname, 'static'), staticOpts));
 browserify.settings.production('cache', '12 months');
 app.get(staticPath('client/listing.js'), browserify('./client/listing.js'));
+app.get(staticPath('client/meetings-listing.js'), browserify('./client/meetings-listing.js'));
 app.get(staticPath('client/topic.js'), browserify('./client/topic.js'));
 app.get(staticPath('client/edit.js'), browserify('./client/edit.js'));
 app.get(staticPath('client/login.js'), browserify('./client/login.js'));
@@ -47,7 +48,7 @@ app.get(staticPath('client/login.js'), browserify('./client/login.js'));
 app.get('/style.css', less('./less/style.less'));
 
 app.get('/', function (req, res) {
-  res.render('home', {});
+  res.render('home', {pages:pages, upcoming: upcoming(), moment: moment});
 });
 
 app.get('/robots.txt', function (req, res) {
@@ -113,7 +114,12 @@ app.get('/pipermail/es-discuss/:month/:id.html', function (req, res, next) {
     .done(null, next);
 })
 
-app.use(require('./lib/notes.js'));
+var meetings = require('./lib/meetings.js');
+var pages = meetings.pages;
+var upcoming = meetings.upcoming;
+
+app.use(meetings.app);
+
 
 var request = require('request');
 var passport = require('passport');
